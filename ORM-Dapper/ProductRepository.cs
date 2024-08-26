@@ -32,5 +32,29 @@ namespace ORM_Dapper
         {
             _connection.Execute("UPDATE products SET Name = @newName WHERE ProductID = @productID;", new { productID, newName });
         }
+
+        public Product GetProduct(int id)
+        {
+            return _connection.QuerySingle<Product>("SELECT * FROM Products WHERE ProductID = @id;", new {id});
+        }
+
+        public void UpdateProduct(Product product)
+        {
+            _connection.Execute("UPDATE products" +
+                                " SET Name = @name, " +
+                                "Price = @price, " +
+                                "CategoryId = @categoryid, " +
+                                "OnSale = @onsale, " +
+                                "Stocklevel = @stocklevel " +
+                                "WHERE ProductID = @id;",
+                                new {
+                                    id = product.ProductID,
+                                    name = product.Name, 
+                                    price = product.Price, 
+                                    categoryid = product.CategoryID, 
+                                    onsale = product.OnSale, 
+                                    stocklevel = product.StockLevel
+                                });
+        }
     }
 }
